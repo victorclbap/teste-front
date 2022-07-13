@@ -9,6 +9,7 @@
     rgba(255, 8, 0, 1) 100%,
     rgba(0, 0, 0, 0) 100%
   );
+  --success: rgb(21, 245, 70);
 }
 
 #name,
@@ -70,7 +71,6 @@
   cursor: pointer;
 }
 
-
-.submit-success-message{
-  color: rgb(21, 245, 70);
+.submit-success-message {
+  color: var(--success);
 }

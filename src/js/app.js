@@ -1,12 +1,9 @@
-
-
 $(document).ready(function () {
- 
-
-   // Checking empty fields
-
+  $("#name").siblings("p").show();
   $("#submit").click(function (e) {
     e.preventDefault();
+
+    // Checking empty fields
 
     $("input").each(function () {
       if ($(this).val() == "") {
@@ -14,52 +11,41 @@ $(document).ready(function () {
       }
     });
 
+    showErrorEmail();
 
-      validateEmail()
-            
-      ShowErrorCPF()
+    ShowErrorCPF();
 
-      showErrorPassword()
-       
-      successMessage()
-  
+    showErrorPassword();
+
+    successMessage();
   });
 
-
-
   // Cancel button click event
+  $("#cancel").click(function (e) {
+    e.preventDefault();
+    $("#form")[0].reset();
+    $(".submit-success-message").hide();
+    $("input").siblings("p").empty();
+  });
 
-  $("#cancel").click(function(e){
-    e.preventDefault()
-    $('#form')[0].reset();
-    $(".submit-success-message").hide()
-  })
+  // Email validation
 
-
-
-
-// Email validation
-
-  const emailValidation = (email) => {
+  const validateEmail = (email) => {
     return email.match(
       /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     );
   };
-  
-  const validateEmail = () => {
-    const $result = $('#result');
-    const email = $('#email').val();
-    $result.text('');
-  
-    if (!emailValidation(email)) {
-      $result.text(email + ' Não é válido!');
+
+  const showErrorEmail = () => {
+    const $result = $("#result");
+    const email = $("#email").val();
+    $result.text("");
+
+    if (!validateEmail(email)) {
+      $result.text(" E-mail inválido" + " " + email);
     }
     return false;
-  }
-  
-  
-
-
+  };
 
   // Date of birth validation
 
@@ -90,107 +76,95 @@ $(document).ready(function () {
   }
 });
 
-
-
-
 // Password validation
 
-function validatePassword (password, passwordConfirmation) {
-    if (password === passwordConfirmation) {
-        return true
-    } else {
-
-        return false
-    }
-
-}
-
-function showErrorPassword(){
-  if (!validatePassword($("#password").val(), $("#password-confirmation").val())){
-      $("#password").siblings("p").html("As senhas devem ser iguais");
-      $("#password-confirmation").siblings("p").html("As senhas devem ser iguais");
+function validatePassword(password, passwordConfirmation) {
+  if (password === passwordConfirmation) {
+    return true;
+  } else {
+    return false;
   }
 }
 
-
+function showErrorPassword() {
+  if (
+    !validatePassword($("#password").val(), $("#password-confirmation").val())
+  ) {
+    $("#password").siblings("p").html("As senhas devem ser iguais");
+    $("#password-confirmation")
+      .siblings("p")
+      .html("As senhas devem ser iguais");
+  }
+}
 
 // CPF validation
-$('#cpf').mask('000.000.000-00');
+$("#cpf").mask("000.000.000-00");
 
-function ShowErrorCPF (){
-  if (!validateCPF($("#cpf").val())){
+function ShowErrorCPF() {
+  if (!validateCPF($("#cpf").val())) {
     $("#cpf").siblings("p").html("CPF Inválido");
-  } 
+  }
 }
 
+function validateCPF(cpf) {
+  cpf = cpf.replace(/[^\d]+/g, "");
+  if (cpf == "") return false;
 
-function validateCPF(cpf) {	
-	cpf = cpf.replace(/[^\d]+/g,'');	
-	if(cpf == '') return false;	
+  // strip known invalid CPFs
 
-	// Strip known invalid CPFs
+  if (
+    cpf.length != 11 ||
+    cpf == "00000000000" ||
+    cpf == "11111111111" ||
+    cpf == "22222222222" ||
+    cpf == "33333333333" ||
+    cpf == "44444444444" ||
+    cpf == "55555555555" ||
+    cpf == "66666666666" ||
+    cpf == "77777777777" ||
+    cpf == "88888888888" ||
+    cpf == "99999999999"
+  )
+    return false;
 
-	if (cpf.length != 11 || 
-		cpf == "00000000000" || 
-		cpf == "11111111111" || 
-		cpf == "22222222222" || 
-		cpf == "33333333333" || 
-		cpf == "44444444444" || 
-		cpf == "55555555555" || 
-		cpf == "66666666666" || 
-		cpf == "77777777777" || 
-		cpf == "88888888888" || 
-		cpf == "99999999999")
-			return false;		
+  // validate the first digit
 
+  let add = 0;
+  for (let i = 0; i < 9; i++) add += parseInt(cpf.charAt(i)) * (10 - i);
+  let rev = 11 - (add % 11);
+  if (rev == 10 || rev == 11) rev = 0;
+  if (rev != parseInt(cpf.charAt(9))) return false;
 
- 
+  // validate the second digit
 
-
-
-	// Validate the first digit
-
-	let add = 0;	
-	for (let i=0; i < 9; i ++)		
-		add += parseInt(cpf.charAt(i)) * (10 - i);	
-		let rev = 11 - (add % 11);	
-		if (rev == 10 || rev == 11)		
-			rev = 0;	
-		if (rev != parseInt(cpf.charAt(9)))		
-			return false;		
-
-
-	// Validate the second digit
-
-	add = 0;	
-	for (let i = 0; i < 10; i ++)		
-		add += parseInt(cpf.charAt(i)) * (11 - i);	
-	rev = 11 - (add % 11);	
-	if (rev == 10 || rev == 11)	
-		rev = 0;	
-	if (rev != parseInt(cpf.charAt(10)))
-		return false;		
-	return true;   
+  add = 0;
+  for (let i = 0; i < 10; i++) add += parseInt(cpf.charAt(i)) * (11 - i);
+  rev = 11 - (add % 11);
+  if (rev == 10 || rev == 11) rev = 0;
+  if (rev != parseInt(cpf.charAt(10))) return false;
+  return true;
 }
-
-
-
-
 
 // Success message setup
 
-$(".submit-success-message").hide()
+$(".submit-success-message").hide();
 
+function successMessage() {
+  let name = $("#name").siblings("p").html();
+  let cpf = $("#cpf").siblings("p").html();
+  let email = $("#email").siblings("p").html();
+  let date = $("#date").siblings("p").html();
+  let password = $("#password").siblings("p").html();
+  let passwordConfirmation = $("#password-confirmation").siblings("p").html();
 
-function successMessage () {
-  let name = $("#name").siblings("p").html()
-  let cpf = $("#cpf").siblings("p").html()
-  let email = $("#email").siblings("p").html()
-  let date = $("#date").siblings("p").html()
-  let password = $("#password").siblings("p").html()
-  let passwordConfirmation = $("#password-confirmation").siblings("p").html()
-
-  if (name == "" && cpf == "" && email == "" && date == "" && password == "" && passwordConfirmation == ""){
-   $(".submit-success-message").show()
+  if (
+    name == "" &&
+    cpf == "" &&
+    email == "" &&
+    date == "" &&
+    password == "" &&
+    passwordConfirmation == ""
+  ) {
+    $(".submit-success-message").show();
   }
 }
