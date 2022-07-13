@@ -1,9 +1,9 @@
 
 
 $(document).ready(function () {
-  // Checking empty fields
+ 
 
-  $('#cpf').mask('000.000.000-00');
+   // Checking empty fields
 
   $("#submit").click(function (e) {
     e.preventDefault();
@@ -15,7 +15,6 @@ $(document).ready(function () {
     });
 
 
-    
       validateEmail()
             
       ShowErrorCPF()
@@ -27,9 +26,13 @@ $(document).ready(function () {
   });
 
 
+
+  // Cancel button click event
+
   $("#cancel").click(function(e){
     e.preventDefault()
     $('#form')[0].reset();
+    $(".submit-success-message").hide()
   })
 
 
@@ -58,7 +61,7 @@ $(document).ready(function () {
 
 
 
-  // Checking date of birth 
+  // Date of birth validation
 
   const dateOfBirth = $("#date");
 
@@ -90,7 +93,7 @@ $(document).ready(function () {
 
 
 
-// Password confirmation
+// Password validation
 
 function validatePassword (password, passwordConfirmation) {
     if (password === passwordConfirmation) {
@@ -111,19 +114,22 @@ function showErrorPassword(){
 
 
 
-
+// CPF validation
+$('#cpf').mask('000.000.000-00');
 
 function ShowErrorCPF (){
-  if (!validarCPF($("#cpf").val())){
+  if (!validateCPF($("#cpf").val())){
     $("#cpf").siblings("p").html("CPF Inválido");
   } 
 }
 
 
-function validarCPF(cpf) {	
+function validateCPF(cpf) {	
 	cpf = cpf.replace(/[^\d]+/g,'');	
 	if(cpf == '') return false;	
-	// Elimina CPFs invalidos conhecidos	
+
+	// Strip known invalid CPFs
+
 	if (cpf.length != 11 || 
 		cpf == "00000000000" || 
 		cpf == "11111111111" || 
@@ -136,7 +142,14 @@ function validarCPF(cpf) {
 		cpf == "88888888888" || 
 		cpf == "99999999999")
 			return false;		
-	// Valida 1o digito	
+
+
+ 
+
+
+
+	// Validate the first digit
+
 	let add = 0;	
 	for (let i=0; i < 9; i ++)		
 		add += parseInt(cpf.charAt(i)) * (10 - i);	
@@ -145,7 +158,10 @@ function validarCPF(cpf) {
 			rev = 0;	
 		if (rev != parseInt(cpf.charAt(9)))		
 			return false;		
-	// Valida 2o digito	
+
+
+	// Validate the second digit
+
 	add = 0;	
 	for (let i = 0; i < 10; i ++)		
 		add += parseInt(cpf.charAt(i)) * (11 - i);	
@@ -160,13 +176,10 @@ function validarCPF(cpf) {
 
 
 
+
+// Success message setup
+
 $(".submit-success-message").hide()
-
-
-
-
-
-
 
 
 function successMessage () {
