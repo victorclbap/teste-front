@@ -1,0 +1,76 @@
+:root {
+  --black: #040404;
+  --white: #e3e3e3;
+  --gray: #242121;
+  --gradient-submit: linear-gradient(to right, #0ee951, #00dabf);
+  --gradient-cancel: linear-gradient(
+    90deg,
+    rgba(255, 147, 143, 1) 0%,
+    rgba(255, 8, 0, 1) 100%,
+    rgba(0, 0, 0, 0) 100%
+  );
+}
+
+#name,
+#cpf,
+#email,
+#date,
+#password,
+#password-confirmation {
+  background-color: var(--gray);
+  color: var(--white);
+  border-top: none;
+  border-right: none;
+  border-left: none;
+  border-bottom: 1px solid var(--white);
+}
+
+#name:focus,
+#cpf:focus,
+#email:focus,
+#date:focus,
+#password:focus,
+#password-confirmation:focus {
+  border: 2px solid var(--white);
+}
+
+.container-fluid {
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: var(--black);
+  color: var(--white);
+}
+
+.container {
+  background-color: var(--gray);
+  height: 80%;
+  border-radius: 2rem;
+  max-width: 58.125rem;
+}
+
+.button-submit {
+  background-image: var(--gradient-submit);
+}
+
+.button-cancel {
+  background-image: var(--gradient-cancel);
+  margin-left: 1em;
+}
+
+.button-cancel,
+.button-submit {
+  border-radius: 0.5rem;
+  padding: 0.3rem 0.6rem 0.3rem 0.6rem;
+  margin-top: 1rem;
+  cursor: pointer;
+  border-style: none;
+}
+
+.form-check-input {
+  cursor: pointer;
+}
+
+
+.submit-success-message{
+  color: rgb(21, 245, 70);
+}
