@@ -1,5 +1,4 @@
 $(document).ready(function () {
-  $("#name").siblings("p").show();
   $("#submit").click(function (e) {
     e.preventDefault();
 
@@ -168,3 +167,9 @@ function successMessage() {
     $(".submit-success-message").show();
   }
 }
+
+// Input setup
+
+$("input").focus(function () {
+  $(this).siblings("p").html("");
+});
